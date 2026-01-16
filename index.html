@@ -10,10 +10,10 @@
 
 <body>
   <header class="site-header">
-    <div class="site-title">
+    <button id="site-home" class="site-title site-home" type="button" aria-label="トップへ戻る">
       <h1>環境を観察して機能を追加するデザイン</h1>
-      <h2>授業「デジタルファブリケーション」</h2>
-    </div>
+      <h2>授業「デジタルファブリケーション」課題</h2>
+    </button>
     <nav class="site-nav">
       <button id="open-course" class="nav-button" type="button">授業について</button>
     </nav>
@@ -45,6 +45,10 @@
     <section id="cards" class="card-grid" aria-label="作品一覧"></section>
   </main>
 
+  <footer class="site-footer">
+    甲南女子大学文学部メディア表現学科 2025
+  </footer>
+
   <div id="modal" class="modal" aria-hidden="true">
     <div class="modal-backdrop" data-close="true"></div>
     <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title">
@@ -59,11 +63,16 @@
       <button class="modal-close" data-close="true" aria-label="閉じる">×</button>
       <div class="modal-body" id="course-body">
         <h2 id="course-title">授業について</h2>
+        <div class="course-video">
+          <iframe src="https://www.youtube.com/embed/WN0YaIVgO1s" title="デジタルファブリケーションについて" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen></iframe>
+        </div>
         <section class="course-section">
-          <h3>授業について</h3>
+          <h3>「デジタルファブリケーション」とは</h3>
           <p>
-            本授業では、3DプリンタとTinkercadを中心にデジタルファブリケーションの基礎を学びます。
-            造形手法の習得に加え、設計の意図と結果の関係を整理する姿勢を重視します。
+            授業では、3DプリンタとTinkercadを中心に3Dの造形手法と出力方法の基礎を学びます。
+            演習内は、造形手法の習得に加え、設計の意図と結果の関係を整理する姿勢を重視します。
             試行錯誤の記録や改善の過程に目を向け、制作の判断を言語化できるようにします。
             作品の共有や撮影も行い、学びのプロセスを可視化します。
           </p>
@@ -74,7 +83,6 @@
             学内の教室や共用スペースなど実在の環境を観察し、既存の空間やモノに新しい機能や意味を加える造形を考えます。
             実際の使われ方や状況に基づいて設計し、無理なく機材で制作できる範囲に落とし込むことを重視します。
             形の面白さだけでなく、どのような判断でその形に至ったかを説明できることを目標とします。
-            そのための試作と改善の過程を丁寧に振り返り、発表では背景と検討を簡潔に共有します。
           </p>
         </section>
       </div>

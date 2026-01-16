@@ -16,12 +16,23 @@ a {
 .site-header {
   background: #101828;
   color: #ffffff;
-  padding: 24px 16px;
+  padding: 20px 16px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .site-title {
-  max-width: 1100px;
-  margin: 0 auto;
+  margin: 0;
+}
+
+.site-home {
+  background: transparent;
+  border: none;
+  padding: 0;
+  text-align: left;
+  color: inherit;
+  cursor: pointer;
 }
 
 .site-title h1 {
@@ -38,11 +49,20 @@ a {
 }
 
 .site-nav {
-  max-width: 1100px;
-  margin: 16px auto 0;
+  margin: 0;
   display: flex;
-  justify-content: flex-end;
-  align-items: flex-start;
+  align-items: center;
+}
+
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.site-header .site-title {
+  flex: 1;
 }
 
 .nav-button {
@@ -59,6 +79,14 @@ a {
   max-width: 1100px;
   margin: 0 auto;
   padding: 24px 16px 48px;
+}
+
+.site-footer {
+  background: #101828;
+  color: #ffffff;
+  text-align: center;
+  padding: 16px;
+  font-size: 13px;
 }
 
 .filters {
@@ -124,21 +152,32 @@ a {
 
 .card img {
   width: 100%;
-  height: 160px;
+  height: 180px;
   object-fit: cover;
   background: #f0f2f5;
 }
 
+.card-media {
+  position: relative;
+}
+
+.card-title-overlay {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 12px 14px;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 15px;
+  background: linear-gradient(180deg, rgba(16, 24, 40, 0) 0%, rgba(16, 24, 40, 0.75) 100%);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
 .card-body {
-  padding: 12px 14px 16px;
+  padding: 10px 14px 16px;
   display: flex;
   flex-direction: column;
   gap: 6px;
-}
-
-.card-title {
-  font-weight: 600;
-  font-size: 16px;
+  min-height: 110px;
 }
 
 .card-meta {
@@ -150,6 +189,20 @@ a {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
+}
+
+.modal-body .card-tags {
+  margin: 8px 0 12px;
+}
+
+.card-meta-label {
+  margin-top: auto;
+  align-self: flex-end;
+  font-size: 12px;
+  color: #667085;
+  background: #f2f4f7;
+  padding: 4px 10px;
+  border-radius: 999px;
 }
 
 .tag {
@@ -184,8 +237,8 @@ a {
   background: #ffffff;
   max-width: 700px;
   width: min(90vw, 700px);
-  border-radius: 16px;
-  padding: 24px;
+  border-radius: 8px;
+  padding: 28px;
   z-index: 2;
   max-height: 80vh;
   overflow-y: auto;
@@ -214,20 +267,93 @@ a {
   margin-bottom: 12px;
 }
 
-.modal-body img {
-  width: 100%;
-  border-radius: 12px;
+.slideshow {
   margin: 12px 0;
+  position: relative;
+}
+
+.slide-track {
+  position: relative;
+  width: 100%;
+  height: 320px;
   background: #f0f2f5;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.slide-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.slide-image.is-active {
+  opacity: 1;
+}
+
+.slide-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: rgba(16, 24, 40, 0.75);
+  color: #ffffff;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.slide-nav.prev {
+  left: 8px;
+}
+
+.slide-nav.next {
+  right: 8px;
+}
+
+.slide-dots {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.slide-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  border: none;
+  background: #d0d5dd;
+  cursor: pointer;
+}
+
+.slide-dot.is-active {
+  background: #101828;
+}
+
+.slideshow[data-count="1"] .slide-nav,
+.slideshow[data-count="1"] .slide-dots {
+  display: none;
 }
 
 .course-section {
-  margin-top: 20px;
+  margin-top: 22px;
 }
 
 .course-section h3 {
-  margin: 0 0 8px;
+  margin: 0 0 14px;
   font-size: 18px;
+  line-height: 1.45;
+  font-weight: 600;
 }
 
 .course-section h4 {
@@ -239,6 +365,21 @@ a {
   margin: 0 0 12px 18px;
 }
 
+.course-section p {
+  margin: 0 0 20px;
+  line-height: 1.9;
+  font-size: 15px;
+  color: #111827;
+}
+
+.course-section+.course-section {
+  margin-top: 36px;
+}
+
+.modal-body#course-body {
+  padding-bottom: 16px;
+}
+
 .course-meta {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -246,6 +387,20 @@ a {
   margin-bottom: 12px;
   font-size: 13px;
   color: #475467;
+}
+
+.course-video {
+  margin-top: 12px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #0f172a;
+}
+
+.course-video iframe {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 0;
 }
 
 .viewer-section {
@@ -278,7 +433,7 @@ a {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-top: 12px;
+  margin: 10px 0 12px;
 }
 
 .link-button {

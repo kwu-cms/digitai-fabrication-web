@@ -13,11 +13,52 @@ const elements = {
   modalBody: document.getElementById("modal-body"),
   courseModal: document.getElementById("course-modal"),
   openCourse: document.getElementById("open-course"),
+  home: document.getElementById("site-home"),
 };
 
 const csvPath = "data/works.csv";
+const sheetId = "15SRnybSLKdCLuzwIFPHIurAHXj1NhFF0wgbODZ3-y9U";
+const sheetGid = "0";
+const sheetCsvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=${sheetGid}`;
+const dataSource = sheetId ? sheetCsvUrl : csvPath;
 
 const normalizeText = (value) => (value || "").toString().trim();
+
+const normalizePath = (value) => {
+  const text = normalizeText(value);
+  if (!text) return "";
+  if (text.startsWith(".stl/")) return text.replace(".stl/", "stl/");
+  if (text.startsWith(".images/")) return text.replace(".images/", "images/");
+  if (text.startsWith(".pdf/")) return text.replace(".pdf/", "pdf/");
+  return text;
+};
+
+const normalizeAssetPath = (value, type) => {
+  const text = normalizePath(value);
+  if (!text) return "";
+  if (text.includes("/") || text.startsWith("http")) return text;
+  if (type === "stl") return `stl/${text}`;
+  if (type === "image") return `images/${text}`;
+  if (type === "pdf") return `pdf/${text}`;
+  return text;
+};
+
+const normalizePaths = (value, type) => {
+  const text = normalizeText(value);
+  if (!text) return [];
+  return text
+    .split(/[|,]/)
+    .map((entry) => normalizeAssetPath(entry, type))
+    .filter(Boolean);
+};
+
+const getField = (item, keys) => {
+  for (const key of keys) {
+    const value = normalizeText(item[key]);
+    if (value) return value;
+  }
+  return "";
+};
 
 const parseCsv = (text) => {
   const rows = [];
@@ -103,6 +144,41 @@ const buildFilters = (data) => {
 const getSelectedTags = () =>
   Array.from(elements.tags.selectedOptions).map((option) => option.value);
 
+let allowUrlUpdate = true;
+
+const updateUrlParams = () => {
+  if (!allowUrlUpdate) return;
+  const params = new URLSearchParams();
+  const keyword = elements.keyword.value.trim();
+  const year = elements.year.value;
+  const tags = getSelectedTags();
+
+  if (keyword) params.set("q", keyword);
+  if (year) params.set("year", year);
+  if (tags.length > 0) params.set("tags", tags.join(","));
+
+  const newUrl = params.toString() ? `?${params.toString()}` : window.location.pathname;
+  window.history.replaceState(null, "", newUrl);
+};
+
+const applyUrlParams = () => {
+  const params = new URLSearchParams(window.location.search);
+  const keyword = params.get("q") || "";
+  const year = params.get("year") || "";
+  const tags = (params.get("tags") || "")
+    .split(",")
+    .map((tag) => tag.trim())
+    .filter(Boolean);
+
+  allowUrlUpdate = false;
+  elements.keyword.value = keyword;
+  elements.year.value = year;
+  Array.from(elements.tags.options).forEach((option) => {
+    option.selected = tags.includes(option.value);
+  });
+  allowUrlUpdate = true;
+};
+
 const matchesKeyword = (work, keyword) => {
   if (!keyword) return true;
   const source = [
@@ -132,10 +208,63 @@ const applyFilters = () => {
   });
 
   renderCards();
+  updateUrlParams();
 };
 
 const buildTagChips = (tags) =>
   tags.map((tag) => `<span class="tag">${tag}</span>`).join("");
+
+const buildSlideshow = (images, title) => {
+  const safeImages = images.length > 0 ? images : ["assets/images/placeholder.svg"];
+  const slides = safeImages
+    .map(
+      (src, index) =>
+        `<img src="${src}" alt="${title}" class="slide-image${index === 0 ? " is-active" : ""}" data-index="${index}" />`,
+    )
+    .join("");
+  const dots = safeImages
+    .map(
+      (_, index) =>
+        `<button class="slide-dot${index === 0 ? " is-active" : ""}" type="button" data-index="${index}" aria-label="画像${index + 1}"></button>`,
+    )
+    .join("");
+
+  return `
+    <div class="slideshow" data-count="${safeImages.length}">
+      <button class="slide-nav prev" type="button" aria-label="前へ">‹</button>
+      <div class="slide-track">${slides}</div>
+      <button class="slide-nav next" type="button" aria-label="次へ">›</button>
+      <div class="slide-dots">${dots}</div>
+    </div>
+  `;
+};
+
+const setupSlideshow = (root) => {
+  const slideshow = root.querySelector(".slideshow");
+  if (!slideshow) return;
+  const slides = Array.from(slideshow.querySelectorAll(".slide-image"));
+  const dots = Array.from(slideshow.querySelectorAll(".slide-dot"));
+  const prev = slideshow.querySelector(".slide-nav.prev");
+  const next = slideshow.querySelector(".slide-nav.next");
+
+  let index = 0;
+
+  const update = (nextIndex) => {
+    index = (nextIndex + slides.length) % slides.length;
+    slides.forEach((slide, i) => {
+      slide.classList.toggle("is-active", i === index);
+    });
+    dots.forEach((dot, i) => {
+      dot.classList.toggle("is-active", i === index);
+    });
+  };
+
+  prev.addEventListener("click", () => update(index - 1));
+  next.addEventListener("click", () => update(index + 1));
+  dots.forEach((dot) => {
+    dot.addEventListener("click", () => update(Number(dot.dataset.index)));
+  });
+};
 
 const renderCards = () => {
   elements.cards.innerHTML = "";
@@ -153,11 +282,13 @@ const renderCards = () => {
     const card = document.createElement("article");
     card.className = "card";
     card.innerHTML = `
-      <img src="${work.image || "assets/images/placeholder.svg"}" alt="${work.title}" />
+      <div class="card-media">
+        <img src="${work.image || "assets/images/placeholder.svg"}" alt="${work.title}" />
+        <div class="card-title-overlay">${work.title}</div>
+      </div>
       <div class="card-body">
-        <div class="card-title">${work.title}</div>
-        <div class="card-meta">${work.student || "学生名未設定"} / ${work.year || "年度未設定"}</div>
         <div class="card-tags">${buildTagChips(work.tags)}</div>
+        <div class="card-meta-label">${work.department || "学年未設定"} / ${work.year || "年度未設定"}</div>
       </div>
     `;
     card.addEventListener("click", () => openModal(work));
@@ -170,28 +301,30 @@ const openModal = (work) => {
   if (work.stl) {
     links.push(`<a class="link-button" href="${work.stl}" download>STLダウンロード</a>`);
   }
+  if (work.pdf) {
+    links.push(`<a class="link-button" href="${work.pdf}" target="_blank" rel="noreferrer">PDF</a>`);
+  }
   if (work.tinkercad) {
     links.push(`<a class="link-button" href="${work.tinkercad}" target="_blank" rel="noreferrer">Tinkercad</a>`);
   }
 
   elements.modalBody.innerHTML = `
     <h2 id="modal-title">${work.title}</h2>
-    <div class="meta">${work.student || "学生名未設定"} / ${work.department || "学科未設定"} / ${
-    work.year || "年度未設定"
-  }</div>
-    <img src="${work.image || "assets/images/placeholder.svg"}" alt="${work.title}" />
+    <div class="meta">${work.department || "学年未設定"} / ${work.year || "年度未設定"}</div>
+    <div class="card-tags">${buildTagChips(work.tags)}</div>
+    <div class="links">${links.join("") || "<span>リンクはまだありません。</span>"}</div>
+    ${buildSlideshow(work.images || [], work.title)}
     <div class="viewer-section">
       <div class="viewer-header">STLプレビュー</div>
       <div id="stl-viewer" class="stl-viewer">
         <div class="viewer-placeholder">STLファイルがありません。</div>
       </div>
     </div>
-    <p>${work.description || "説明はまだありません。"}</p>
-    <div class="links">${links.join("") || "<span>リンクはまだありません。</span>"}</div>
   `;
   elements.modal.classList.add("is-open");
   elements.modal.setAttribute("aria-hidden", "false");
 
+  setupSlideshow(elements.modalBody);
   if (window.StlViewer && work.stl) {
     window.StlViewer.render({ containerId: "stl-viewer", url: work.stl });
   }
@@ -230,29 +363,52 @@ const setupModal = () => {
 
 const init = async () => {
   try {
-    const response = await fetch(csvPath);
+    const response = await fetch(dataSource);
     const text = await response.text();
     const items = parseCsv(text)
-      .map((item) => ({
-        id: item.id,
-        title: item.title || "無題",
-        student: item.student,
-        year: item.year,
-        department: item.department,
-        description: item.description,
-        image: item.image,
-        stl: item.stl,
-        tinkercad: item.tinkercad,
-        tags: (item.tags || "")
-          .split("|")
-          .map((tag) => normalizeText(tag))
-          .filter(Boolean),
-      }))
-      .filter((item) => item.title);
+      .map((item) => {
+        const tagsText = getField(item, ["tags", "タグ", "TAGS"]);
+        const title = getField(item, ["title", "制作物", "TITLE"]) || "無題";
+        const student = getField(item, ["student", "氏名", "NAME_JA"]);
+        const year = getField(item, ["year", "年度", "YEAR"]);
+        const department = getField(item, ["department", "所属学年", "COURSE_YEAR"]);
+        const description = getField(item, ["description", "説明"]);
+        const images = normalizePaths(
+          getField(item, ["image", "images", "IMAGES_FILENAME"]),
+          "image",
+        );
+        const image = images[0] || "";
+        const stl = normalizeAssetPath(getField(item, ["stl", "STL", "STL_FILENAME"]), "stl");
+        const pdf = normalizeAssetPath(getField(item, ["pdf", "PDF", "PDF_FILENAME"]), "pdf");
+        const tinkercad = getField(item, ["tinkercad", "URL"]);
+        const presentFlag = getField(item, ["発表", "PRESENTATION"]);
+
+        return {
+          id: getField(item, ["id", "No.", "学籍番号", "ID"]),
+          title,
+          student,
+          year,
+          department,
+          description,
+          image,
+          images,
+          stl,
+          pdf,
+          tinkercad,
+          presentFlag,
+          tags: tagsText
+            .split(/[\|,]/)
+            .map((tag) => normalizeText(tag))
+            .filter(Boolean),
+        };
+      })
+      .filter((item) => item.title)
+      .filter((item) => item.presentFlag && item.presentFlag.toLowerCase() === "true");
 
     state.works = items;
     state.filtered = items;
     buildFilters(items);
+    applyUrlParams();
     renderCards();
 
     ["input", "change"].forEach((eventName) => {
@@ -264,6 +420,16 @@ const init = async () => {
     elements.openCourse.addEventListener("click", () => {
       elements.courseModal.classList.add("is-open");
       elements.courseModal.setAttribute("aria-hidden", "false");
+    });
+
+    elements.home.addEventListener("click", () => {
+      elements.keyword.value = "";
+      elements.year.value = "";
+      Array.from(elements.tags.options).forEach((option) => {
+        option.selected = false;
+      });
+      applyFilters();
+      window.scrollTo({ top: 0, behavior: "smooth" });
     });
   } catch (error) {
     elements.cards.innerHTML = `<div class="empty-state">CSVの読み込みに失敗しました。</div>`;
