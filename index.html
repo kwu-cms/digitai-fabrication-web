@@ -20,6 +20,35 @@
   </header>
 
   <main class="container">
+    <section class="pdf-section" aria-label="PDFビューア">
+      <div class="pdf-header">
+        <h3>PDFビューア</h3>
+        <span id="pdf-title" class="pdf-title">PDFを選択してください</span>
+      </div>
+      <div class="pdf-frame">
+        <button id="pdf-prev" class="pdf-overlay prev" type="button" aria-label="前のPDF">‹</button>
+        <div id="pdf-carousel" class="pdf-carousel" aria-live="polite">
+          <div class="pdf-item pdf-prev2">
+            <img id="pdf-image-prev2" alt="前の前のPDF" loading="lazy" />
+          </div>
+          <div class="pdf-item pdf-prev">
+            <img id="pdf-image-prev" alt="前のPDF" loading="lazy" />
+          </div>
+          <div class="pdf-item pdf-current">
+            <img id="pdf-image" alt="PDF表紙" loading="lazy" />
+            <button id="pdf-open" class="pdf-open" type="button">PDFを開く</button>
+          </div>
+          <div class="pdf-item pdf-next">
+            <img id="pdf-image-next" alt="次のPDF" loading="lazy" />
+          </div>
+          <div class="pdf-item pdf-next2">
+            <img id="pdf-image-next2" alt="次の次のPDF" loading="lazy" />
+          </div>
+        </div>
+        <button id="pdf-next" class="pdf-overlay next" type="button" aria-label="次のPDF">›</button>
+      </div>
+      <div id="pdf-list" class="pdf-dots" aria-label="PDF一覧"></div>
+    </section>
     <section class="filters" aria-label="検索とフィルタ">
       <div class="filter-group">
         <label for="filter-keyword">キーワード</label>
@@ -85,6 +114,24 @@
             形の面白さだけでなく、どのような判断でその形に至ったかを説明できることを目標とします。
           </p>
         </section>
+      </div>
+    </div>
+  </div>
+
+  <div id="pdf-modal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop" data-close="true"></div>
+    <div class="modal-content pdf-modal-content" role="dialog" aria-modal="true" aria-labelledby="pdf-modal-title">
+      <button class="modal-close" data-close="true" aria-label="閉じる">×</button>
+      <div class="modal-body">
+        <h2 id="pdf-modal-title">PDFビューア</h2>
+        <div class="pdf-modal-frame">
+          <iframe id="pdf-modal-iframe" title="PDFビューア" loading="lazy"></iframe>
+        </div>
+        <div class="pdf-modal-controls">
+          <button id="pdf-page-prev" type="button">前へ</button>
+          <span id="pdf-page-indicator">1 / 1</span>
+          <button id="pdf-page-next" type="button">次へ</button>
+        </div>
       </div>
     </div>
   </div>

@@ -81,6 +81,223 @@ a {
   padding: 24px 16px 48px;
 }
 
+.pdf-section {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 18px;
+  box-shadow: 0 8px 20px rgba(16, 24, 40, 0.08);
+}
+
+.pdf-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.pdf-header h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.pdf-title {
+  font-size: 13px;
+  color: #475467;
+  max-width: 520px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.pdf-frame {
+  width: 100%;
+  aspect-ratio: 16 / 7;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #e4e7ec;
+  background: #f8fafc;
+  position: relative;
+}
+
+.pdf-carousel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+
+.pdf-item {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 56%;
+  height: 80%;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 12px 30px rgba(16, 24, 40, 0.18);
+  background: #ffffff;
+  transition: transform 0.65s ease, opacity 0.25s ease;
+}
+
+.pdf-item img {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  object-fit: cover;
+}
+
+.pdf-item.pdf-current {
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  opacity: 1;
+}
+
+.pdf-item.pdf-prev {
+  transform: translate(calc(-50% - (100% + var(--pdf-gap, 24px))), -50%);
+  opacity: 0.6;
+}
+
+.pdf-item.pdf-next {
+  transform: translate(calc(-50% + (100% + var(--pdf-gap, 24px))), -50%);
+  opacity: 0.6;
+}
+
+.pdf-item.pdf-prev2 {
+  transform: translate(calc(-50% - (200% + (var(--pdf-gap, 24px) * 2))), -50%);
+  opacity: 0.35;
+}
+
+.pdf-item.pdf-next2 {
+  transform: translate(calc(-50% + (200% + (var(--pdf-gap, 24px) * 2))), -50%);
+  opacity: 0.35;
+}
+
+.pdf-carousel.move-next .pdf-item.pdf-prev {
+  transform: translate(-170%, -50%);
+}
+
+.pdf-carousel.move-next .pdf-item.pdf-current {
+  transform: translate(-150%, -50%);
+}
+
+.pdf-carousel.move-next .pdf-item.pdf-next {
+  transform: translate(-30%, -50%);
+}
+
+.pdf-carousel.move-prev .pdf-item.pdf-prev {
+  transform: translate(30%, -50%);
+}
+
+.pdf-carousel.move-prev .pdf-item.pdf-current {
+  transform: translate(50%, -50%);
+}
+
+.pdf-carousel.move-prev .pdf-item.pdf-next {
+  transform: translate(170%, -50%);
+}
+
+.pdf-open {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  border: none;
+  background: rgba(16, 24, 40, 0.8);
+  color: #ffffff;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  cursor: pointer;
+  z-index: 3;
+}
+
+.pdf-modal-content {
+  max-width: 1100px;
+  width: min(94vw, 1100px);
+}
+
+.pdf-modal-frame {
+  width: 100%;
+  height: 70vh;
+  max-height: 720px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #e4e7ec;
+  background: #f8fafc;
+}
+
+.pdf-modal-frame iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.pdf-modal-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.pdf-modal-controls button {
+  border: 1px solid #d0d5dd;
+  background: #ffffff;
+  color: #101828;
+  padding: 6px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.pdf-modal-controls span {
+  font-size: 13px;
+  color: #475467;
+}
+
+.pdf-overlay {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  background: rgba(16, 24, 40, 0.8);
+  color: #ffffff;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.pdf-overlay.prev {
+  left: 10px;
+}
+
+.pdf-overlay.next {
+  right: 10px;
+}
+
+.pdf-dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.pdf-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  border: none;
+  background: #d0d5dd;
+  cursor: pointer;
+}
+
+.pdf-dot.is-active {
+  background: #101828;
+}
+
 .site-footer {
   background: #101828;
   color: #ffffff;
