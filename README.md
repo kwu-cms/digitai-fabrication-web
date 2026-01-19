@@ -1,6 +1,7 @@
 # デジタルファブリケーション成果サイト
 
 学生の制作物をCSVから読み込み、画像・STL・Tinkercadリンクをカード表示する静的サイトです。
+**URL**: [https://kwu-cms.github.io/digitai-fabrication-web/](https://kwu-cms.github.io/digitai-fabrication-web/)
 
 ## 使い方
 
@@ -31,8 +32,6 @@ const sheetId = "";
 ```
 
 ## GitHub Pages 公開
-
-**公開URL**: [https://kwu-cms.github.io/digitai-fabrication-web-2025/](https://kwu-cms.github.io/digitai-fabrication-web-2025/)
 
 ### 公開手順
 
