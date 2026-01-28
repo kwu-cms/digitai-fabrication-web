@@ -2,6 +2,42 @@
   box-sizing: border-box;
 }
 
+/* カラーパレット（大学サイト風） */
+:root {
+  --university-primary: #8B1538;
+  /* ダークマルーン */
+  --university-primary-dark: #6B0F2A;
+  --university-primary-light: #A52A4A;
+  --university-accent: #C41E3A;
+  /* 深い赤 */
+  --university-accent-light: #E63950;
+  --university-text: #2C2C2C;
+  --university-text-light: #666;
+  --university-bg: #F8F8F8;
+  --university-border: #E0E0E0;
+  --university-white: #FFFFFF;
+
+  /* タグ分類別カラー（鮮やかさ80%、明るさ120%） */
+  --tag-generation: #5B98FD;
+  /* デザイン分野系 - ブルー */
+  --tag-generation-dark: #4980D3;
+  --tag-data: #3EA882;
+  /* デザイン要素系 - グリーン */
+  --tag-data-dark: #328667;
+  --tag-expression: #F27F3C;
+  /* 技術・手法系 - オレンジ */
+  --tag-expression-dark: #C26630;
+  --tag-spatial: #8F67F0;
+  /* 場所系 - パープル */
+  --tag-spatial-dark: #7253C0;
+  --tag-evaluation: #EC5454;
+  /* 体験・価値系 - レッド */
+  --tag-evaluation-dark: #BE4343;
+  --tag-default: #80899A;
+  /* 用途・機能系 - グレー */
+  --tag-default-dark: #5A6677;
+}
+
 body {
   margin: 0;
   font-family: "Hiragino Kaku Gothic ProN", "Noto Sans JP", system-ui, sans-serif;
@@ -44,12 +80,13 @@ a {
 }
 
 .site-header {
-  background: #101828;
-  color: #ffffff;
+  background: var(--university-primary);
+  color: var(--university-white);
   padding: 20px 16px;
   position: sticky;
   top: 0;
   z-index: 10;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .site-header,
@@ -245,7 +282,7 @@ a {
   width: 36px;
   height: 36px;
   border-radius: 999px;
-  background: rgba(16, 24, 40, 0.8);
+  background: rgba(139, 21, 56, 0.8);
   color: #ffffff;
   cursor: pointer;
   font-size: 24px;
@@ -257,7 +294,7 @@ a {
 }
 
 .pdf-carousel .slick-arrow:hover {
-  background: rgba(16, 24, 40, 0.9);
+  background: rgba(139, 21, 56, 0.9);
 }
 
 .pdf-carousel .slick-arrow.slick-prev {
@@ -325,7 +362,7 @@ a {
   width: 36px;
   height: 36px;
   border-radius: 999px;
-  background: rgba(16, 24, 40, 0.8);
+  background: rgba(139, 21, 56, 0.8);
   color: #ffffff;
   cursor: pointer;
   z-index: 2;
@@ -356,12 +393,12 @@ a {
 }
 
 .pdf-dot.is-active {
-  background: #101828;
+  background: var(--university-primary);
 }
 
 .site-footer {
-  background: #101828;
-  color: #ffffff;
+  background: var(--university-primary);
+  color: var(--university-white);
   text-align: center;
   padding: 16px;
   font-size: 13px;
@@ -448,8 +485,8 @@ a {
   color: #ffffff;
   font-weight: 600;
   font-size: 15px;
-  background: linear-gradient(180deg, rgba(16, 24, 40, 0) 0%, rgba(16, 24, 40, 0.75) 100%);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.7) 100%);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 .card-body {
@@ -486,11 +523,65 @@ a {
 }
 
 .tag {
-  font-size: 11px;
-  background: #eef4ff;
-  color: #3538cd;
-  padding: 2px 6px;
-  border-radius: 999px;
+  display: inline-block;
+  padding: 4px 10px;
+  background: var(--tag-default);
+  color: var(--university-white);
+  border-radius: 12px;
+  font-size: 0.75em;
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+  transition: background 0.3s;
+}
+
+/* タグ分類別の色 */
+.tag-generation {
+  background: var(--tag-generation);
+}
+
+.tag-generation:hover {
+  background: var(--tag-generation-dark);
+}
+
+.tag-data {
+  background: var(--tag-data);
+}
+
+.tag-data:hover {
+  background: var(--tag-data-dark);
+}
+
+.tag-expression {
+  background: var(--tag-expression);
+}
+
+.tag-expression:hover {
+  background: var(--tag-expression-dark);
+}
+
+.tag-spatial {
+  background: var(--tag-spatial);
+}
+
+.tag-spatial:hover {
+  background: var(--tag-spatial-dark);
+}
+
+.tag-default {
+  background: var(--tag-default);
+}
+
+.tag-default:hover {
+  background: var(--tag-default-dark);
+}
+
+.tag-evaluation {
+  background: var(--tag-evaluation);
+}
+
+.tag-evaluation:hover {
+  background: var(--tag-evaluation-dark);
 }
 
 .modal {
@@ -561,7 +652,7 @@ a {
   width: 32px;
   height: 32px;
   border-radius: 999px;
-  background: rgba(16, 24, 40, 0.75);
+  background: rgba(139, 21, 56, 0.75);
   color: #ffffff;
   cursor: pointer;
   z-index: 3;
@@ -592,7 +683,7 @@ a {
 }
 
 .slide-dot.is-active {
-  background: #101828;
+  background: var(--university-primary);
 }
 
 .slideshow[data-count="1"] .slide-nav,
@@ -756,10 +847,15 @@ a {
   gap: 6px;
   padding: 8px 14px;
   border-radius: 999px;
-  background: #101828;
-  color: #ffffff;
+  background: var(--university-primary);
+  color: var(--university-white);
   text-decoration: none;
   font-size: 13px;
+  transition: background 0.3s ease;
+}
+
+.link-button:hover {
+  background: var(--university-primary-dark);
 }
 
 .empty-state {

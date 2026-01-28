@@ -80,7 +80,7 @@ export const buildPdfViewer = ({ items, elements, openPdfModal }) => {
     renderDots();
 
     // スライドのクリックイベント（PDFモーダルを開く）
-    $carousel.on("click", ".pdf-slide", function() {
+    $carousel.on("click", ".pdf-slide", function () {
         const slideIndex = $(this).data("index");
         const item = pdfItems[slideIndex];
         openPdfModal(elements, item.pdf, item.title);

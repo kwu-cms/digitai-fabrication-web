@@ -41,7 +41,7 @@ const elements = {
 };
 
 const csvPath = "data/works.csv";
-const sheetId = "15SRnybSLKdCLuzwIFPHIurAHXj1NhFF0wgbODZ3-y9U";
+const sheetId = "";
 const sheetGid = "0";
 const sheetCsvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=${sheetGid}`;
 const dataSource = sheetId ? sheetCsvUrl : csvPath;
@@ -148,8 +148,57 @@ const applyFilters = () => {
     updateUrlParams();
 };
 
+// タグ分類マッピング
+const getTagCategory = (tag) => {
+    const tagLower = tag.toLowerCase();
+    
+    // 場所系 (spatial) - パープル
+    if (tagLower.includes("教室") || tagLower.includes("コモンルーム") || tagLower.includes("大学構内")) {
+        return "spatial";
+    }
+    
+    // デザイン分野系 (generation) - ブルー
+    if (tagLower.includes("プロダクトデザイン") || tagLower.includes("ビジュアルデザイン") || 
+        tagLower.includes("グラフィックデザイン") || tagLower.includes("インタラクションデザイン") ||
+        tagLower.includes("キャラクターデザイン") || tagLower.includes("モチーフデザイン")) {
+        return "generation";
+    }
+    
+    // 技術・手法系 (expression) - オレンジ
+    if (tagLower.includes("3dプリント") || tagLower.includes("レーザーカット") ||
+        tagLower.includes("機構") || tagLower.includes("構造") || tagLower.includes("マグネット") ||
+        tagLower.includes("連結構造") || tagLower.includes("パズル") || tagLower.includes("クリップ") ||
+        tagLower.includes("カバー")) {
+        return "expression";
+    }
+    
+    // デザイン要素系 (data) - グリーン
+    if (tagLower.includes("情報デザイン") || tagLower.includes("サインデザイン") ||
+        tagLower.includes("人間工学") || tagLower.includes("視認性") || tagLower.includes("視覚") ||
+        tagLower.includes("外装のデザイン") || tagLower.includes("装飾") || tagLower.includes("収納のデザイン") ||
+        tagLower.includes("アタッチメントのデザイン") || tagLower.includes("複合機能のデザイン") ||
+        tagLower.includes("ユーモアデザイン") || tagLower.includes("環境デザイン") ||
+        tagLower.includes("掲示デザイン") || tagLower.includes("サイン計画")) {
+        return "data";
+    }
+    
+    // 体験・価値系 (evaluation) - レッド
+    if (tagLower.includes("ユーザー体験") || tagLower.includes("使用環境改善") ||
+        tagLower.includes("快適性") || tagLower.includes("整理のデザイン") || tagLower.includes("空間演出") ||
+        tagLower.includes("インタラクション") || tagLower.includes("ui/ux") ||
+        tagLower.includes("行動誘導") || tagLower.includes("遊びの設計") || tagLower.includes("ビジュアル設計")) {
+        return "evaluation";
+    }
+    
+    // デフォルト (用途・機能系など) - グレー
+    return "default";
+};
+
 const buildTagChips = (tags) =>
-    tags.map((tag) => `<span class="tag">${tag}</span>`).join("");
+    tags.map((tag) => {
+        const category = getTagCategory(tag);
+        return `<span class="tag tag-${category}">${tag}</span>`;
+    }).join("");
 
 const shuffleArray = (items) => {
     const array = [...items];
